@@ -4,7 +4,7 @@ import main
 # Gráfico de Boxplot dos Níveis de Estresse
 
 # Obtendo os valores de máximo, mínimo e média para cada categoria de "Estresse"
-val = main.tab.groupby('Estresse')['Est_Total'].agg(['max', 'min', 'mean']).apply(list, axis=1)
+val = main.tab.groupby('Estresse')['Est_Total'].agg(['max', 'min', 'mean'])#.apply(list, axis=1)
 
 # Personalizando as cores e a linha central do boxplot
 colors = ["#2E7D32", "#388E3C", '#66BB6A', '#81C784']  # Cores personalizadas
@@ -13,8 +13,8 @@ fig, ax = plt.subplots(1, 1)
 
 # Criando o boxplot com cores personalizadas
 box = ax.boxplot([val.iloc[0], 
-                   val.iloc[1], 
                    val.iloc[2], 
+                   val.iloc[1], 
                    val.iloc[3]],
                   patch_artist=True)
 
@@ -39,7 +39,7 @@ plt.show()
 
 # Obtendo os valores de máximo, mínimo e média para cada categoria de "Período"
 val = main.tab.groupby('Período')['Est_Total'].agg(['max', 'min', 'mean']).apply(list, axis=1)
-
+print(val)
 # Personalizando as cores e a linha central do boxplot
 colors = ["#F2C974", "#E6A175"]  # Cores personalizadas
 

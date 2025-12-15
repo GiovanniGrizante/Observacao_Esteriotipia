@@ -1,16 +1,21 @@
 import pandas as pd
 from scipy.stats import levene, f_oneway, shapiro, ttest_ind
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
+from colorama import Fore, Style
 
-tab = pd.read_excel('Planilhas/Planilha_Esteriotipia.xlsx')
+tab = pd.read_csv('Planilhas/Planilha_Esteriotipia.csv', sep=',')
 tab = tab.drop(columns=['ID','Data'])
 tab = tab.dropna()
+
+# Ajustar os valores da coluna 'Estresse'
+tab['Estresse'] = tab['Estresse'].str.title().str.replace(' ', '')
+tab['Período'] = tab['Período'].str.title().str.replace(' ', '')
 
 if __name__ == "__main__":
   # Teste de normalidade total - SHAPIRO-WILK
   stat, p = shapiro(tab['Est_Total'])
 
-  print('\nTeste de normalidade total - SHAPIRO-WILK:\n')
+  print(f'\n{Fore.BLUE}SHAPIRO-WILK{Style.RESET_ALL} - Teste de normalidade total')
   print(f"Estatística: {stat:.4f}")
   print(f"Valor-p: {p:.4f}")
   if p > 0.05:
@@ -27,7 +32,7 @@ if __name__ == "__main__":
                     tab.loc[tab['Estresse'] == 'Alto', 'Est_Total'],
                     tab.loc[tab['Estresse'] == 'Nulo', 'Est_Total'])
 
-  print('\nTeste de homogeneidade das variâncias por estresse - LEVENE\n')
+  print(f'\n{Fore.GREEN}LEVENE{Style.RESET_ALL} - Teste de homogeneidade das variâncias por estresse')
   print(f"Estatística: {stat:.4f}")
   print(f"Valor-p: {p:.4f}")
   if p < 0.05:
@@ -39,7 +44,7 @@ if __name__ == "__main__":
   stat, p = levene(tab.loc[tab['Período'] == 'Manhã', 'Est_Total'],
                     tab.loc[tab['Período'] == 'Tarde', 'Est_Total'])
 
-  print('\nTeste de homogeneidade das variâncias por período - LEVENE\n')
+  print(f'\n{Fore.GREEN}LEVENE{Style.RESET_ALL} - Teste de homogeneidade das variâncias por período')
   print(f"Estatística: {stat:.4f}")
   print(f"Valor-p: {p:.4f}")
   if p < 0.05:
@@ -53,9 +58,9 @@ if __name__ == "__main__":
                     tab.loc[tab['Estresse'] == 'Alto', 'Est_Total'],
                     tab.loc[tab['Estresse'] == 'Nulo', 'Est_Total'])
 
-  print('\nTeste das variâncias dos grupos por estresse - ANOVA\n')
+  print(f'\n{Fore.YELLOW}ANOVA{Style.RESET_ALL} - Teste das variâncias dos grupos por estresse')
   print(f"Estatística F: {stat:.4f}")
-  print(f"Valor-p: {p:.4f}")
+  print(f"Valor-p: {p}")
   if p < 0.05:
       print(f"As variâncias são significativamente diferentes (Rejeitamos H0).")
   else:
@@ -65,9 +70,9 @@ if __name__ == "__main__":
   stat, p = f_oneway(tab.loc[tab['Período'] == 'Manhã', 'Est_Total'],
                     tab.loc[tab['Período'] == 'Tarde', 'Est_Total'])
 
-  print('\nTeste das variâncias dos grupos por período - ANOVA')
+  print(f'\n{Fore.YELLOW}ANOVA{Style.RESET_ALL} - Teste das variâncias dos grupos por período')
   print(f"Estatística F: {stat:.4f}")
-  print(f"Valor-p: {p:.4f}")
+  print(f"Valor-p: {p}")
   if p < 0.05:
       print(f"As variâncias são significativamente diferentes (Rejeitamos H0).")
   else:
@@ -77,7 +82,7 @@ if __name__ == "__main__":
   stat, p = ttest_ind(tab.loc[tab['Período'] == 'Manhã', 'Est_Total'],
                       tab.loc[tab['Período'] == 'Tarde', 'Est_Total'])
 
-  print('\nTeste T de Student por período')
+  print(f'\n{Fore.RED}Teste T de Student{Style.RESET_ALL} por período')
   print(f"Estatística T: {stat:.4f}")
   print(f"Valor-p: {p:.4f}")
   if p < 0.05:
@@ -90,5 +95,5 @@ if __name__ == "__main__":
                             groups=tab['Estresse'],
                             alpha=0.05)
 
-  print('\nTeste de Tukey por estresse')
+  print(f'\n{Fore.YELLOW}Teste de Tukey{Style.RESET_ALL} por estresse')
   print(f'{tukey}\n')
