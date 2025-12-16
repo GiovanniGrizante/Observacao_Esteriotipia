@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import main
 
 # Gráfico de Boxplot dos Níveis de Estresse
-
 # Obtendo os valores de máximo, mínimo e média para cada categoria de "Estresse"
 val = main.tab.groupby('Estresse')['Est_Total'].agg(['max', 'min', 'mean'])#.apply(list, axis=1)
 
@@ -36,7 +35,6 @@ plt.show()
 
 
 # Gráfico de Boxplot dos Períodos do Dia
-
 # Obtendo os valores de máximo, mínimo e média para cada categoria de "Período"
 val = main.tab.groupby('Período')['Est_Total'].agg(['max', 'min', 'mean']).apply(list, axis=1)
 print(val)
